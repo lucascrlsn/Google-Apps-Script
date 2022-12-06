@@ -1,0 +1,25 @@
+function onOpen(e){
+  userAccessReporting();
+}
+
+function userAccessReporting() {
+
+  if(Session.getActiveUser().getEmail() != 'someEmail@odomain.com'){
+    let user = Session.getActiveUser().getEmail();
+    let emailFirstName = user.slice(0,user.indexOf('@')).split('.')[0];
+    let firstName = emailFirstName.charAt(0).toUpperCase() + emailFirstName.slice(1);
+
+    let emailLastName = user.slice(0,user.indexOf('@')).split('.')[user.slice(0,user.indexOf('@')).split('.').length - 1];
+    let lastName = emailLastName.charAt(0).toUpperCase() + emailLastName.slice(1);
+
+    let userName = firstName + ' ' + lastName;
+
+    let subject = userName + ' accessed the Project';
+    let body = 'Sheet URL'
+
+    GmailApp.sendEmail('someEmail@domain.com',subject,body,{noReply: true});
+  }
+
+  else{Logger.log("Accessed by program owner, no email notification was sent.")}
+
+}
