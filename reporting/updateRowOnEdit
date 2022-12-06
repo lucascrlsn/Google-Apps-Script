@@ -1,0 +1,37 @@
+function onEdit(e) {
+  // SOURCE: https://webapps.stackexchange.com/questions/37408/auto-updating-column-in-google-spreadsheet-showing-last-modify-date
+  // Your sheet params
+  var sheetName = "Tab Name"; 
+  var dateModifiedColumnIndex = 29;
+  var dateModifiedColumnLetter = 'AC';
+  var userModifiedColumnLetter = 'AD';
+
+  var range = e.range; // range just edited
+  var sheet = range.getSheet();
+  if (sheet.getName() !== sheetName) {
+    return;
+  }
+
+  // If the column isn't our modified date column
+  if ((range.getColumn() != dateModifiedColumnIndex) && (range.getColumn() != 30) && (range.getColumn() != dateModifiedColumnIndex) && (range.getColumn() != 27)) { 
+    var row = range.getRow();
+    var time = new Date();
+    time = Utilities.formatDate(time, "GMT-05:00", "MM/dd/yy");
+    var dateModifiedRange = sheet.getRange(dateModifiedColumnLetter + row.toString());
+    var userModifiedRange = sheet.getRange(userModifiedColumnLetter + row.toString());
+
+    // GET USER
+    let user = Session.getActiveUser().getEmail();
+    let emailFirstName = user.slice(0,user.indexOf('@')).split('.')[0];
+    let firstName = emailFirstName.charAt(0).toUpperCase() + emailFirstName.slice(1);
+
+    let emailLastName = user.slice(0,user.indexOf('@')).split('.')[user.slice(0,user.indexOf('@')).split('.').length - 1];
+    let lastName = emailLastName.charAt(0).toUpperCase() + emailLastName.slice(1);
+
+    let sheetUser = firstName + ' ' + lastName;
+
+    // WRITE DATA
+    dateModifiedRange.setValue(time);
+    userModifiedRange.setValue(sheetUser);
+  };
+}
