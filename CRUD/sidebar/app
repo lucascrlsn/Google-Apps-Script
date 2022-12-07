@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <style>
+      .nav-link {
+        cursor:pointer;
+      }
+
+      #loading {
+        position:fixed;
+        top:0;
+        left:0;
+        z-index:10000;
+        width:100vw;
+        height:100vh;
+        background-color: rgba(255,255,255,.70);
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div class="container">
+
+      <nav id="navigation" class="mb-3">
+
+        <ul class="nav nav-tabs main-nav">
+
+          <li class="nav-item">
+            <div class="nav-link active" id="lenel-search-link">Find Lenel Record</div>
+          </li>
+
+          <li class="nav-item">
+            <div class="nav-link" id="lenel-help-link">Help</div>
+          </li>
+
+        </ul>
+
+      </nav>
+
+      <div id="lenel-app"></div>
+      <!-- Content here -->
+      </div>
+
+      <div id="loading" class="d-flex justify-content-center align-items-center invisible">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+    -->
+    <script>
+      let lenelData;
+
+      function loadView(options){
+        let id = typeof options.id === "undefined" ? "lenel-app" : options.id;
+        let cb = typeof options.callback === "undefined" ? function(){} : options.callback;
+        // ACTIVATE LOADING MODAL
+        loadingStart();
+        google.script.run.withSuccessHandler(function(html){
+          document.getElementById(id).innerHTML = html;
+          // DEACTIVATE LOADING MODAL
+          loadingEnd();
+          typeof options.params === "undefined" ? cb(): cb(options.params);
+        })[options.func]();
+      }
+
+
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // LOAD LENEL SEARCH TAB
+      function loadLenelSearchView(){
+        // PLACE THIS AFTER SEARCHVIEW BELOW IF PASSING PARAMS - , callback: otherFunc, params: {title: "You have executed ANOTHER search!"}
+        loadView({func: "loadLenelSearchView", callback: setLenelDataForSearch});
+        document.getElementById("lenel-search-link").textContent = "Find Lenel Record";
+        
+      }
+
+      // LOAD LENEL RECORDS ONLY INTO MEMORY FOR EASY SEARCH IN FUNC ABOVE
+      function setLenelDataForSearch(){
+        // ACTIVATE LOADING MODAL
+        loadingStart();
+
+        google.script.run.withSuccessHandler(function(lenelDataForSliceReturned){
+          lenelData = lenelDataForSliceReturned.slice();
+          // DEACTIVATE LOADING MODAL
+          loadingEnd();
+        }).getLenelDataForSearch();
+        
+      }
+
+      function searchLenel(){
+
+        let searchLenelInput = document.getElementById("searchLenelInput").value.toString().toLowerCase();
+        let searchLenelWords = searchLenelInput.split(/\s+/);
+
+        let lenelSearchColumns = [0,2,3,4,5,6,7,8,9,13,33,34,35];
+
+        let lenelResultsArray = searchLenelInput === "" ? [] : lenelData.filter(function(r){
+
+          return searchLenelWords.every(function(word){
+            return lenelSearchColumns.some(function(colIndex){
+              return r[colIndex].toString().toLowerCase().indexOf(word) !== -1;
+            });
+
+          });
+
+        });
+
+        let lenelRecordCount = searchLenelInput === "" ? "" : "Record Count: " + lenelResultsArray.length;
+        document.getElementById("searchCounter").textContent = lenelRecordCount;
+
+        let lenelSearchResultsBox = document.getElementById("lenelSearchResults");
+        let lenelTemplateBox = document.getElementById("lenelRowTemplate");
+        let lenelTemplate = lenelTemplateBox.content;
+
+        lenelSearchResultsBox.innerHTML = "";
+
+        lenelResultsArray.forEach(function(r){
+
+          let lenelRow = lenelTemplate.cloneNode(true);
+
+          let recordIDColumn = lenelRow.querySelector(".recordID");
+          let dateColumn = lenelRow.querySelector(".date");
+          let siteColumn = lenelRow.querySelector(".site");
+          let processColumn = lenelRow.querySelector(".process");
+          let shiftColumn = lenelRow.querySelector(".shift");
+          let justificationColumn = lenelRow.querySelector(".justification");
+          let employeeTypeColumn = lenelRow.querySelector(".employeeType");
+          let firstNameColumn = lenelRow.querySelector(".firstName");
+          let lastNameColumn = lenelRow.querySelector(".lastName");
+          let EUIDColumn = lenelRow.querySelector(".EUID");
+          let securityProfessionalColumn = lenelRow.querySelector(".securityProfessional");
+          let securityProfessionalEmailColumn = lenelRow.querySelector(".securityProfessionalEmail");
+          let formCertificationColumn = lenelRow.querySelector(".formCertification");
+          let managementReviewColumn = lenelRow.querySelector(".managementReview");
+          let deleteButton = lenelRow.querySelector(".delete-button");
+          let editButton = lenelRow.querySelector(".edit-button");
+
+          recordIDColumn.textContent = r[0];
+          deleteButton.dataset.recordID = r[0];
+          editButton.dataset.recordID = r[0];
+
+          dateColumn.textContent = r[2];
+          siteColumn.textContent = r[3];
+          processColumn.textContent = r[4];
+          shiftColumn.textContent = r[5];
+          justificationColumn.textContent = r[6];
+          employeeTypeColumn.textContent = r[7];
+          firstNameColumn.textContent = r[8];
+          lastNameColumn.textContent = r[9];
+          EUIDColumn.textContent = r[13];
+          securityProfessionalColumn.textContent = r[33];
+          securityProfessionalEmailColumn.textContent = r[34];
+          formCertificationColumn.textContent = r[35];
+
+          lenelSearchResultsBox.appendChild(lenelRow);
+
+        });
+
+      }
+
+      function deleteLenelRecord(e){
+        let lenelRecordId = e.target.dataset.recordID;
+        // ACTIVATE LOADING MODAL
+        loadingStart();
+        google.script.run.withSuccessHandler(function(){
+          e.target.closest(".lenel-result-box").remove();
+          let lenelIds = lenelData.map(function(r){ return r[0].toString().toLowerCase() });
+          let index = lenelIds.indexOf(lenelRecordId.toString().toLowerCase());
+          lenelData.splice(index,1);
+          // DEACTIVATE LOADING MODAL
+          loadingEnd();
+        }).deleteLenelDataByID(lenelRecordId);
+
+      }
+
+      function afterEditViewLoads(params){
+        // FILLS THE EDIT FORM WITH THE EXISTING DATA IN THE SHEET
+
+        // ACTIVATE LOADING MODAL
+        loadingStart();
+
+        // FILLS EDIT FORM WITH LENEL RECORD ID ONLY
+        document.getElementById("recordID").value = params.recordID;
+
+        // GET ENTIRE ROW OF DATA
+        google.script.run.withSuccessHandler(function(lenelRecordInfo){
+          document.getElementById("date").value = lenelRecordInfo.date;
+          document.getElementById("site").value = lenelRecordInfo.site;
+          document.getElementById("process").value = lenelRecordInfo.process;
+          document.getElementById("shift").value = lenelRecordInfo.shift;
+          document.getElementById("justification").value = lenelRecordInfo.justification;
+          document.getElementById("employeeType").value = lenelRecordInfo.employeeType;
+          document.getElementById("fname").value = lenelRecordInfo.fname;
+          document.getElementById("lname").value = lenelRecordInfo.lname;
+          document.getElementById("EUID").value = lenelRecordInfo.EUID;
+          document.getElementById("securityProfessional").value = lenelRecordInfo.securityProfessional + ' | ' + lenelRecordInfo.formCertification + ' | SIGNED: ' + lenelRecordInfo.timestamp;
+          document.getElementById("securityProfessionalEmail").value = lenelRecordInfo.securityProfessionalEmail;
+          document.getElementById("managementReview").value = lenelRecordInfo.managementReview;
+          // DEACTIVATE LOADING MODAL
+          loadingEnd();
+        }).getLenelRecordById(params.recordID);
+
+        document.getElementById("lenel-search-link").textContent = "Back";
+        
+        
+      }
+
+      function editLenelRecord(){
+        // ACTIVATE LOADING MODAL
+        loadingStart();
+
+        // GRAB ALL ROW DATA FROM EDIT FORM AND RUN BACKEND SERVER FUNC
+        let lenelRecordInfo = {};
+        lenelRecordInfo.date = document.getElementById("date").value;
+        lenelRecordInfo.site = document.getElementById("site").value;
+        lenelRecordInfo.process = document.getElementById("process").value;
+        lenelRecordInfo.shift = document.getElementById("shift").value;
+        lenelRecordInfo.justification = document.getElementById("justification").value;
+        lenelRecordInfo.employeeType = document.getElementById("employeeType").value;
+        lenelRecordInfo.fname = document.getElementById("fname").value;
+        lenelRecordInfo.lname = document.getElementById("lname").value;
+        lenelRecordInfo.EUID = document.getElementById("EUID").value;
+        lenelRecordInfo.managementReview = document.getElementById("managementReview").value;        
+
+        // idForEdit NOT PART OF PREVIOUS OBJECT
+        let lenelIdForEdit = document.getElementById("recordID").value;
+
+        google.script.run.withSuccessHandler(function(res){
+          document.getElementById("save-success-message").classList.remove("invisible");
+          setTimeout(function(){
+            document.getElementById("save-success-message").classList.add("invisible")
+          },2000);
+          setTimeout(function(){loadLenelSearchView()},1500);
+          // DEACTIVATE LOADING MODAL
+          loadingEnd();          
+        }).editLenelRecordById(lenelIdForEdit,lenelRecordInfo);
+        
+
+      }
+
+
+      function loadLenelEditView(e){
+        loadView({func: "loadLenelEditView", callback: afterEditViewLoads, params: {recordID: e.target.dataset.recordID} });
+        
+      }
+
+
+      function loadLenelHelpView(){
+        loadView({func: "loadLenelHelpView"});
+        
+      }
+
+      function activeTabChange(e){
+        let navLinks = document.querySelectorAll(".main-nav .nav-link");
+
+        navLinks.forEach(function(linkEl){
+          linkEl.classList.remove("active");
+        });
+        e.target.classList.add("active");
+
+      }
+
+      function loadingStart(){
+        document.getElementById("loading").classList.remove("invisible");
+        
+      }
+
+      function loadingEnd(){
+        document.getElementById("loading").classList.add("invisible");
+        
+      }
+
+      document.getElementById("lenel-search-link").addEventListener("click",loadLenelSearchView);
+      document.getElementById("lenel-help-link").addEventListener("click",loadLenelHelpView);
+
+      function lenelInputEventHandler(e){
+        if(e.target.matches("#searchLenelInput")){
+          searchLenel();
+        }
+      }
+
+      function clickDeleteEventHandler(e){
+        if(e.target.matches(".delete-button")){
+          deleteLenelRecord(e);
+        }
+        if(e.target.matches(".edit-button")){
+          loadLenelEditView(e);
+        }
+
+        if(e.target.matches("#save-changes")){
+          editLenelRecord();
+        }
+
+        if(e.target.matches("#cancel-changes")){
+          loadLenelSearchView();
+        }
+
+      }
+
+      function navClickEventHandler(e){
+        if(e.target.matches(".nav-link")){
+          activeTabChange(e);
+        }
+
+      }
+
+      document.getElementById("lenel-app").addEventListener("input",lenelInputEventHandler);
+      document.getElementById("lenel-app").addEventListener("click",clickDeleteEventHandler);
+      document.getElementById("navigation").addEventListener("click",navClickEventHandler);
+      document.addEventListener("DOMContentLoaded", loadLenelSearchView);
+
+    </script>
+
+
+  </body>
+</html>
