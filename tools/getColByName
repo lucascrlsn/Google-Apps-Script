@@ -1,0 +1,9 @@
+function getColByName(colName, row) {
+  // RETRIEVES COLUMN LOCATION BASED OFF OF NAME LOOKUP: https://stackoverflow.com/questions/36346918/get-column-values-by-column-name-not-column-index
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var col = data[0].indexOf(colName);
+  if (col != -1) {
+    return data[row-1][col];
+  }
+}
