@@ -1,0 +1,121 @@
+function emailResponse(){
+  var spreadsheet = SpreadsheetApp.openById("SHEET ID");
+  var sheet = spreadsheet.getSheetByName("SHEET TAB NAME");
+  var formURL = sheet.getFormUrl()
+  if (!formURL) {SpreadsheetApp.getUi().alert('No Google Form associated with this sheet. Please connect it from your Form.')
+  return
+  }
+
+  var form = FormApp.openByUrl(formURL)
+
+  var lastRow = sheet.getLastRow();
+  var entryType = sheet.getRange(lastRow,2).getValue();
+  //var formSubmitter = sheet.getRange(lastRow,2).getValue();
+  var formSubmitter = getByName('Email Address', lastRow);
+
+  var editLink = getByName('Form Response Edit URL', lastRow);
+  var tessLogBook = "LOG BOOK URL";
+
+  
+  // Include this messsage at the bottom of every response
+  var footerMessage = "<b>To edit this record: </b>" + editLink + "<br><b>You can access this Logbook Here: </b>" + tessLogBook;
+
+  if(entryType == 'Record a Lost and Found Item'){
+    // build a correctly formatted timeFound var and incorporate
+    //var dateFound = sheet.getRange(lastRow,13).getValue();
+    //var dateFound = getByName('Date Found', sheet.getLastRow());
+    var item = getByName('Item Description', lastRow);
+    var locationFound = getByName('Location Found', lastRow);
+    var timeFound = getByName('Intake Time', lastRow)
+
+    var supervisorSubject = 'A lost and found item has been recorded';
+    var supervisorMessage = item + ' was found at the ' + locationFound;
+
+    var submitterSubject = 'Your lost and found item has been recieved';
+    var submitterMessage = 'Lost and Found Job Aid: URL';
+  } // END Lost and Found Response
+  
+  else if(entryType == 'Complete the Daily Checklist'){
+    var submittedBy = getByName('Checklist Completed By', lastRow);
+
+    var supervisorSubject = 'A checklist has been submitted';
+    var supervisorMessage = submittedBy + ' completed the daily checklist.';
+
+    var submitterSubject = 'Your checklist data has been recorded';
+    var submitterMessage = 'Thank you for your response, please remember to continue submitting near the end of the shift.';      
+  } // Daily Checklist Response
+
+  else if(entryType == 'Perform a Camera Audit'){
+    
+    var submittedBy = getByName('Security Professional Completing the Camera Audit', lastRow);
+    if (getByName('Camera Audit Notes', lastRow) == ''){
+      var cameraAuditNotes = 'No notes additional notes were added.'
+    }
+    else var cameraAuditNotes = getByName('Camera Audit Notes', lastRow);
+
+    var supervisorSubject = 'A camera audit has been completed';
+    var supervisorMessage = submittedBy + ' performed a camera audit. ' + cameraAuditNotes;
+
+    var submitterSubject = 'Your camera audit has been processed';
+    var submitterMessage = 'Thank you for your response, here is workorder link if needed: https://docs.google.com/forms/d/e/1FAIpQLScDYc8mTral0_iFKdg_ZbL8t2HkwO6LpCriHSektr4M0oZL4g/viewform';  
+  } // END Camera Audit Response
+
+  else if(entryType == 'Print a Badge or Change a Record in Lenel'){
+    var modJustification = getByName('Why is this record being modified?', lastRow).toLowerCase();
+    var actionType = getByName('Action Type', lastRow).toLowerCase(); 
+    var badgeType = getByName('What type of badge is it?', lastRow).toLowerCase(); 
+    var lenelRecordName = getByName('Lenel Record Name', lastRow); 
+
+    var supervisorSubject = 'A record has been modified in Lenel';
+    var supervisorMessage = 'A ' + modJustification + ' ' + actionType + ' has been processed for ' + badgeType + ' ' + lenelRecordName + '.';  
+
+    var submitterSubject = 'Your ' + actionType + ' has been recieved';
+    var submitterMessage = 'A ' + modJustification + ' ' + actionType + ' has been processed for ' + badgeType + ' ' + lenelRecordName + '.';          
+  } // END Lenel Modification Response
+
+  else if(entryType == 'Issue a Temp Badge'){
+    if (getByName('Employee Type', lastRow) == 'Associate'){
+      var tempBadgeType = 'An associate';
+    }
+    else var tempBadgeType = 'A contractor';
+    var tempBadgeIssuedTo = getByName('Temp Badge Name', lastRow); 
+    var tempBadgeOrg = getByName('Organization', lastRow); 
+
+    var supervisorSubject = 'A temporary badge has been issued';
+    var supervisorMessage = tempBadgeType + ' temp badge for ' + tempBadgeIssuedTo + ' from ' + tempBadgeOrg + ' has been issued.';
+
+    var submitterSubject = 'The temporary badge for ' + tempBadgeIssuedTo + ' has been recieved';
+    var submitterMessage = 'Thank you for recording this badge issue. Refer to the temporary badge tracker job aid if any questions: JOB AID URL';   
+  } // END Temp Badge Response
+
+  //Logger.log('Sending email notification...');
+
+  // SUPERVISOR NOTIFICATION
+  GmailApp.sendEmail('lucas.carlson@capitalone.com',supervisorSubject,"",{
+    noReply: true,
+    htmlBody: supervisorMessage + "<br><br>" + footerMessage + "<br><br>" + "Email responses can be sent to: " + formSubmitter
+  });
+
+  // SUPERVISOR MOBILE NOTIFICATION
+  GmailApp.sendEmail('PHONENUMBER@CARRIERDOMAIN.COM',"",supervisorMessage,{
+    noReply: true
+  });
+  
+  // SUBMITTER NOTIFICATION
+  //GmailApp.sendEmail(formSubmitter,submitterSubject,submitterMessage,{
+    //noReply: true
+  //});
+
+  //Logger.log('Email notification complete!');
+
+}
+
+function getColByName(colName, row) {
+  // RETRIEVES COLUMN LOCATION BASED OFF OF NAME LOOKUP: https://stackoverflow.com/questions/36346918/get-column-values-by-column-name-not-column-index
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var col = data[0].indexOf(colName);
+  if (col != -1) {
+    return data[row-1][col];
+  }
+}
