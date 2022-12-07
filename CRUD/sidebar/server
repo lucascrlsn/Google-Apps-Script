@@ -5,7 +5,7 @@ function editLenelRecords() {
   var scriptProperties = PropertiesService.getScriptProperties();
 
   // SET WORKSHEET ID
-  var SpreadsheetID = "1hU7kyA_tIxxHjbGhbzvAEesDjYiVLEFthpCiz_Ncsok";
+  var SpreadsheetID = "SHEET ID";
   scriptProperties.setProperty('SpreadsheetID', JSON.stringify(SpreadsheetID).replace(/['"]+/g,""));
   
 
