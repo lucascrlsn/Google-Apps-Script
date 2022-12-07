@@ -1,0 +1,249 @@
+function editLenelRecords() {
+
+  var startFunc = new Date().getTime();
+  
+  var scriptProperties = PropertiesService.getScriptProperties();
+
+  // SET WORKSHEET ID
+  var SpreadsheetID = "1hU7kyA_tIxxHjbGhbzvAEesDjYiVLEFthpCiz_Ncsok";
+  scriptProperties.setProperty('SpreadsheetID', JSON.stringify(SpreadsheetID).replace(/['"]+/g,""));
+  
+
+  // SET COLUMN HEADER INDEXS IN THE BACKGROUND
+  var ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
+  var ws = ss.getSheetByName("RAW DATA");
+  
+
+  var headers = ws.getDataRange().getValues().shift();
+  // SET HEADER INDICES PROPERTY FOR LATER USE
+  scriptProperties.setProperty('rawDataColIndices', JSON.stringify(headers).replace(/['"]+/g,""))
+  
+
+  // CALL PROPERTY BY: PropertiesService.getScriptProperties().getProperty('rawDataColIndices')
+  
+  var dateColumnIndex = headers.indexOf("Date")+1;
+  scriptProperties.setProperty('dateColumnIndex', JSON.stringify(dateColumnIndex).replace(/['"]+/g,""));
+  
+
+  var siteColumnIndex = headers.indexOf("Site")+1;
+  scriptProperties.setProperty('siteColumnIndex', JSON.stringify(siteColumnIndex).replace(/['"]+/g,""));
+  
+
+  var justificationColumnIndex = headers.indexOf("Justification")+1;
+  scriptProperties.setProperty('justificationColumnIndex', JSON.stringify(justificationColumnIndex).replace(/['"]+/g,""));
+  
+
+  var processColumnIndex = headers.indexOf("Process")+1;
+  scriptProperties.setProperty('processColumnIndex', JSON.stringify(processColumnIndex).replace(/['"]+/g,""));
+  
+
+  var shiftColumnIndex = headers.indexOf("Shift")+1;
+  scriptProperties.setProperty('shiftColumnIndex', JSON.stringify(shiftColumnIndex).replace(/['"]+/g,""));
+  
+
+  var employeeTypeColumnIndex = headers.indexOf("Employee Type")+1;
+  scriptProperties.setProperty('employeeTypeColumnIndex', JSON.stringify(employeeTypeColumnIndex).replace(/['"]+/g,""));
+  
+
+  var firstNameColumnIndex = headers.indexOf("First Name")+1;
+  scriptProperties.setProperty('firstNameColumnIndex', JSON.stringify(firstNameColumnIndex).replace(/['"]+/g,""));
+  
+
+  var lastNameColumnIndex = headers.indexOf("Last Name")+1;
+  scriptProperties.setProperty('lastNameColumnIndex', JSON.stringify(lastNameColumnIndex).replace(/['"]+/g,""));
+  
+
+  var EUIDColumnIndex = headers.indexOf("EUID")+1;
+  scriptProperties.setProperty('EUIDColumnIndex', JSON.stringify(EUIDColumnIndex).replace(/['"]+/g,""));
+  
+
+  var securityProfessionalColumnIndex = headers.indexOf("Security Professional")+1;
+  scriptProperties.setProperty('securityProfessionalColumnIndex', JSON.stringify(securityProfessionalColumnIndex).replace(/['"]+/g,""));
+  
+
+  var securityProfessionalEmailColumnIndex = headers.indexOf("Form User Email")+1;
+  scriptProperties.setProperty('securityProfessionalEmailColumnIndex', JSON.stringify(securityProfessionalEmailColumnIndex).replace(/['"]+/g,""));
+  
+
+  var formCertificationColumnIndex = headers.indexOf("Form Certification")+1;
+  scriptProperties.setProperty('formCertificationColumnIndex', JSON.stringify(formCertificationColumnIndex).replace(/['"]+/g,""));
+  
+
+  var managementReviewColumnIndex = headers.indexOf("Management Review")+1;
+  scriptProperties.setProperty('managementReviewColumnIndex', JSON.stringify(managementReviewColumnIndex).replace(/['"]+/g,""));
+  
+
+  const htmlServ = HtmlService.createTemplateFromFile("Lenel App");
+  const html = htmlServ.evaluate();
+  html.setWidth(1200).setHeight(600);
+  const ui = SpreadsheetApp.getUi();
+
+  
+
+  ui.showModalDialog(html, "Lenel Records");
+
+  var endFunc = new Date().getTime();
+
+  Logger.log('The Lenel tool opened in ' + (endFunc - startFunc) + ' microseconds');
+
+}
+
+function loadLenelPartialHTML_(partial){
+  // REUSABLE FOR TABS WITHIN LENEL EDIT GUI
+  const htmlServ = HtmlService.createTemplateFromFile(partial);
+  return htmlServ.evaluate().getContent();
+}
+
+function loadLenelSearchView(){
+
+  return loadLenelPartialHTML_("Lenel Search View");
+
+}
+
+function loadLenelEditView(){
+
+  return loadLenelPartialHTML_("Lenel Edit View");
+
+}
+
+function loadLenelHelpView(){
+
+  return loadLenelPartialHTML_("Lenel Help View");
+
+}
+
+function getLenelDataForSearch(){
+
+  var startFunc = new Date().getTime();
+
+  var ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
+  const ws = ss.getSheetByName("RAW DATA");
+
+  var endFunc = new Date().getTime();
+
+  Logger.log('All data was returned in ' + (endFunc - startFunc) + ' microseconds');
+
+  return ws.getRange(2,1,ws.getLastRow()-1,ws.getMaxColumns()).getDisplayValues();
+
+}
+
+function deleteLenelDataByID(lenelIdForDelete){
+
+  var startFunc = new Date().getTime();
+
+  const ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
+  const ws = ss.getSheetByName("RAW DATA");
+
+  const lenelRecordId = ws.getRange(2,1,ws.getLastRow()-1,1).getDisplayValues().map(r => r[0].toString().toLowerCase());
+  const lenelRecordIdPosition = lenelRecordId.indexOf(lenelIdForDelete.toString().toLowerCase());
+  const lenelRecordIdRowNumber = lenelRecordIdPosition === -1 ? 0 : lenelRecordIdPosition + 2;
+
+  ws.deleteRow(lenelRecordIdRowNumber);
+
+  var endFunc = new Date().getTime();
+
+  Logger.log('The record was deleted in ' + (endFunc - startFunc) + ' microseconds');
+}
+
+function getLenelRecordById(lenelIdForEdit){
+
+  var startFunc = new Date().getTime();
+
+  const ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
+  const ws = ss.getSheetByName("RAW DATA");
+
+  const lenelRecordId = ws.getRange(2,1,ws.getLastRow()-1,1).getDisplayValues().map(r => r[0].toString().toLowerCase());
+  const lenelRecordIdPosition = lenelRecordId.indexOf(lenelIdForEdit.toString().toLowerCase());
+  const lenelRecordIdRowNumber = lenelRecordIdPosition === -1 ? 0 : lenelRecordIdPosition + 2;
+  const lenelRecordInfo = ws.getRange(lenelRecordIdRowNumber,1,1,ws.getMaxColumns()).getDisplayValues()[0];
+
+  // GET ROW VALUES
+  var headers = ws.getDataRange().getValues().shift();
+    
+  var date = headers.indexOf("Date");
+  var site = headers.indexOf("Site");
+  var process = headers.indexOf("Process");
+  var shift = headers.indexOf("Shift");
+  var justification = headers.indexOf("Justification");
+  var employeeType = headers.indexOf("Employee Type");
+  var firstName = headers.indexOf("First Name");
+  var lastName = headers.indexOf("Last Name");  
+  var EUID = headers.indexOf("EUID");
+  var securityProfessional = headers.indexOf("Security Professional");
+  var securityProfessionalEmail = headers.indexOf("Form User Email");
+  var formCertification = headers.indexOf("Form Certification");
+  var managementReview = headers.indexOf("Management Review");
+
+  var endFunc = new Date().getTime();
+
+  Logger.log('A specific record was grabbed in ' + (endFunc - startFunc) + ' microseconds');
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // FIND AND SET COLUMN INDEXES BASED OF COLUMN NAMES - THIS ALLOWS SERVER TO FLEX IF/WHEN COLUMN/FIELDS ARE MODIFIED AND/OR MOVED
+  
+  return {recordID: lenelRecordInfo[0],
+            timestamp: lenelRecordInfo[1],
+            date: lenelRecordInfo[date],
+            site: lenelRecordInfo[site],
+            process: lenelRecordInfo[process],
+            shift: lenelRecordInfo[shift],
+            justification: lenelRecordInfo[justification],
+            employeeType: lenelRecordInfo[employeeType],
+            fname: lenelRecordInfo[firstName],
+            lname: lenelRecordInfo[lastName],
+            EUID: lenelRecordInfo[EUID],
+            securityProfessional: lenelRecordInfo[securityProfessional],
+            securityProfessionalEmail: lenelRecordInfo[securityProfessionalEmail],
+            formCertification: lenelRecordInfo[formCertification],
+            managementReview: lenelRecordInfo[managementReview]
+            }
+
+}
+
+function editLenelRecordById(lenelIdForEdit,lenelRecordInfo){
+
+  var startFunc = new Date().getTime();
+  
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ws = ss.getSheetByName("RAW DATA");
+  const lenelRecordId = ws.getRange(2,1,ws.getLastRow()-1,1).getDisplayValues().map(r => r[0].toString().toLowerCase());
+  const lenelRecordIdPosition = lenelRecordId.indexOf(lenelIdForEdit.toString().toLowerCase());
+  const lenelRecordIdRowNumber = lenelRecordIdPosition === -1 ? 0 : lenelRecordIdPosition + 2;
+
+  // ONLY WRITE IF A CHANGE WAS MADE BY THE USER
+
+  // PREVIOUS CONDITIONALS
+
+  /*if(lenelRecordInfo.date != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex'))){
+    ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')).setValue(lenelRecordInfo.date);
+  }*/
+
+  //TERNARY
+
+  let changeValue = 'False';
+
+  lenelRecordInfo.date != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')) ? (ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')).setValue(lenelRecordInfo.date),(changeValue = 'True')) : PASS; 
+
+  lenelRecordInfo.site != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('siteColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('siteColumnIndex')).setValue(lenelRecordInfo.site) : PASS;
+
+  lenelRecordInfo.process != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('processColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('processColumnIndex')).setValue(lenelRecordInfo.process) : PASS;
+
+  lenelRecordInfo.shift != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('shiftColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('shiftColumnIndex')).setValue(lenelRecordInfo.shift) : PASS;
+
+  lenelRecordInfo.justification != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('justificationColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('justificationColumnIndex')).setValue(lenelRecordInfo.justification) : PASS;
+
+  lenelRecordInfo.employeeType != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('employeeTypeColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('employeeTypeColumnIndex')).setValue(lenelRecordInfo.employeeType) : PASS;
+
+  lenelRecordInfo.firstName != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')).setValue(lenelRecordInfo.fname) : PASS;
+  
+  lenelRecordInfo.lname != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')).setValue(lenelRecordInfo.lname) : PASS;
+
+  lenelRecordInfo.EUID != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('EUIDColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('EUIDColumnIndex')).setValue(lenelRecordInfo.EUID) : PASS;
+
+  lenelRecordInfo.managementReview != ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('managementReviewColumnIndex')) ? ws.getRange(lenelRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('managementReviewColumnIndex')).setValue(lenelRecordInfo.managementReview) : PASS;
+  
+  var endFunc = new Date().getTime();
+
+  Logger.log('A specific record was edited in ' + (endFunc - startFunc) + ' microseconds. Was the date changed? ' + changeValue);
+
+  return true;
