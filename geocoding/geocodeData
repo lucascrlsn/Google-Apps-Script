@@ -1,0 +1,40 @@
+function updatePublicMap() {
+
+  var sheetID = "";
+  var sheetTab = "";
+  var sheet = SpreadsheetApp.openById(sheetID).getSheetByName(sheetTab);
+   
+  var range = sheet.getDataRange();
+  var cells = range.getValues();
+   
+  var latitudes = [];
+  var longitudes = [];
+
+  for (var i = 1; i < cells.length; i++) {
+   var address = cells[i][0];
+   
+    if(address =="") {
+      lat = ""
+      lng = ""
+      latitudes.push([lat]);
+      longitudes.push([lng]);
+    } else{
+    
+      var geocoder = Maps.newGeocoder().geocode(address);
+      var res = geocoder.results[0];
+ 
+      var lat = lng = 0;
+      if (res) {
+       lat = res.geometry.location.lat;
+       lng = res.geometry.location.lng;
+     }
+   
+     latitudes.push([lat]);
+     longitudes.push([lng]);
+  }
+ }
+   
+  sheet.getRange('D2')
+  .offset(0, 0, latitudes.length).setValues(latitudes);
+  sheet.getRange('E2').offset(0, 0, longitudes.length).setValues(longitudes);
+}
