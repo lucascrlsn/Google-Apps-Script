@@ -1,4 +1,4 @@
-function updatePublicMap() {
+function geocodeMyMap() {
 
   var sheetID = "";
   var sheetTab = "";
