@@ -1,0 +1,3 @@
+function updateAllMaps(e) {
+  updatePublicMap();
+}
