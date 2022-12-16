@@ -157,34 +157,34 @@ function generateForm() {
 
   if(yyyy == '2021'){
     // Establish Folder IDs  > DriveApp.getFolderById("")
-    var JanFolder = DriveApp.getFolderById("1Y0XcIICcfNk8z4vK8xJoTOBpzPpiuGWC")
-    var FebFolder = DriveApp.getFolderById("1yzgwhSp-4id_64EOG2nsvYvOCsyRaf0x")
-    var MarFolder = DriveApp.getFolderById("13hkga_bbOlBZLzX33U-qw67k1jiJIHcA")
-    var AprFolder = DriveApp.getFolderById("13yg0WIYhwSBrSt0HSnZdbh1AqFK3WXtu")
-    var MayFolder = DriveApp.getFolderById("157colv37w6rez3FH4VsqThStnD2eTQuG")
-    var JunFolder = DriveApp.getFolderById("1IE6fm7K23Ee3fH6_QqMQqx2HVAJTlBM1")
-    var JulFolder = DriveApp.getFolderById("1kklfJywBWB86xVCZkxuKpsG3JRmVythA")
-    var AugFolder = DriveApp.getFolderById("1fYiH8tVNZx4fxntKHiu5YwcqvL23YwHL")
-    var SepFolder = DriveApp.getFolderById("1KGcCKieRe8RCwVn5UYzkeoTdKEkTrURH")
-    var OctFolder = DriveApp.getFolderById("1u7B8wtnip8ulxjSyW81o9jq26edW_n7P")
-    var NovFolder = DriveApp.getFolderById("1SU32n1OnF8ouWl9QrkmGQapxveJpGUHw")
-    var DecFolder = DriveApp.getFolderById("1gUhvt5QDuuAxBTBZrUkz-jo17XvgpnqB")
+    var JanFolder = DriveApp.getFolderById("ID")
+    var FebFolder = DriveApp.getFolderById("ID")
+    var MarFolder = DriveApp.getFolderById("ID")
+    var AprFolder = DriveApp.getFolderById("ID")
+    var MayFolder = DriveApp.getFolderById("ID")
+    var JunFolder = DriveApp.getFolderById("ID")
+    var JulFolder = DriveApp.getFolderById("ID")
+    var AugFolder = DriveApp.getFolderById("ID")
+    var SepFolder = DriveApp.getFolderById("ID")
+    var OctFolder = DriveApp.getFolderById("ID")
+    var NovFolder = DriveApp.getFolderById("ID")
+    var DecFolder = DriveApp.getFolderById("ID")
   }
 
   else if(yyyy == '2022'){
     // Establish Folder IDs  > DriveApp.getFolderById("")
-    var JanFolder = DriveApp.getFolderById("1LMeVTRipMmiPkVonjZ0aJ2SSbTJe2C4u")
-    var FebFolder = DriveApp.getFolderById("17MRxPHxakKmewgx04q4VRpvhKJBkXX73")
-    var MarFolder = DriveApp.getFolderById("1kxuM_u5Gcu91WJh2YNlJ573VkqGoecZg")
-    var AprFolder = DriveApp.getFolderById("1S7gGf0UZn2VhhCtvUWK_KlCjrs8ZgXwn")
-    var MayFolder = DriveApp.getFolderById("1JXlA1QnLinORfgBkBmpSjQKz7myylMyX")
-    var JunFolder = DriveApp.getFolderById("1AvoR2cQdi8TfKRfJVnBhS_e92UfPXW6I")
-    var JulFolder = DriveApp.getFolderById("1avv-fy-WfI3_z3t3tw0YNAS51h_zz5aT")
-    var AugFolder = DriveApp.getFolderById("17JB6STU0x0j1YUT-7vF6XGpFH0RWenLV")
-    var SepFolder = DriveApp.getFolderById("1XmxWGIPns8Pa9_LVYej9IJMDzBto7_oB")
-    var OctFolder = DriveApp.getFolderById("1iuoIdfeEZPzBu501w2hKyp6qOyauZ35L")
-    var NovFolder = DriveApp.getFolderById("1QfQJi2baDq2XRADED6K23dlhQqob4Jei")
-    var DecFolder = DriveApp.getFolderById("1RWxoJdctxzkEoegDsVt2GCjlZ4YNldGw")
+    var JanFolder = DriveApp.getFolderById("ID")
+    var FebFolder = DriveApp.getFolderById("ID")
+    var MarFolder = DriveApp.getFolderById("ID")
+    var AprFolder = DriveApp.getFolderById("ID")
+    var MayFolder = DriveApp.getFolderById("ID")
+    var JunFolder = DriveApp.getFolderById("ID")
+    var JulFolder = DriveApp.getFolderById("ID")
+    var AugFolder = DriveApp.getFolderById("ID")
+    var SepFolder = DriveApp.getFolderById("ID")
+    var OctFolder = DriveApp.getFolderById("ID")
+    var NovFolder = DriveApp.getFolderById("ID")
+    var DecFolder = DriveApp.getFolderById("ID")
   }
   
   // Correctly Formated Current Date
@@ -263,7 +263,7 @@ function generateForm() {
   //logbookFolder.removeFile(tempDocFile);
   
   // Send Message
-  //var messageBody = "The Pass On PDF named \'" + formName + "\' has been saved at Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + " or " + URL;
+  //var messageBody = "The Pass On PDF named \'" + formName + "\' has been saved at FOLDER PATH NAME" + yyyy + "/" + formFolder + " or " + URL;
   var messageBody = "<strong>Shift: </strong>" + shift + "<br><strong>Filename: </strong>" + formName + "<br><b>File URL: </b>" + newPassOnURL + "<br><b>Folder Location: </b> Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + "<br><b>Folder URL: </b>" + URL;
 
   var rslMessageBody = "<strong>Badging and Lenel</strong>" +  "<br>" + badingAndLenelNarative + "<br>" + "<br>" + "<strong>Cameras</strong>" + "<br>" + cameraAuditNarrativeNarative + "<br>" + "<br>" + newPassOnURL;
