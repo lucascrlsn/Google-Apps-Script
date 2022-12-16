@@ -1,119 +1,119 @@
 function generateForm() {
   
   // Supervisor's Spreadsheet 
-  //var SpreadsheetID = "SHEET ID";
-  //var SheetName = "SHEET NAME";
+  //let SpreadsheetID = "SHEET ID";
+  //let SheetName = "SHEET NAME";
 
-  //var ss = SpreadsheetApp.openById(SpreadsheetID)
-  //var sheet = ss.getSheetByName(SheetName)
+  //let ss = SpreadsheetApp.openById(SpreadsheetID)
+  //let sheet = ss.getSheetByName(SheetName)
 
   // Access Logbook
-  var activess = SpreadsheetApp.getActiveSpreadsheet();
-  var activessSheet = activess.getSheetByName("Pass On");
+  let activess = SpreadsheetApp.getActiveSpreadsheet();
+  let activessSheet = activess.getSheetByName("SHEET NAME");
 
   // Written Date
-  var dateLocation = activessSheet.getRange(2,10);
-  var date = dateLocation.getValue();
+  let dateLocation = activessSheet.getRange(2,10);
+  let date = dateLocation.getValue();
 
   // Shorthand Date for Title
-  var titleDateLocation = activessSheet.getRange(4,5);
-  var titleDate = titleDateLocation.getValue();
+  let titleDateLocation = activessSheet.getRange(4,5);
+  let titleDate = titleDateLocation.getValue();
 
   // Shift
-  var shiftLocation = activessSheet.getRange(4, 4);
-  var shift = shiftLocation.getValue();
+  let shiftLocation = activessSheet.getRange(4, 4);
+  let shift = shiftLocation.getValue();
 
   // Security Officer #1
-  var activess = SpreadsheetApp.getActiveSpreadsheet();
-  var activessSheet = activess.getSheetByName("Pass On");
-  var securityOfficer1Location = activessSheet.getRange(4, 10);
-  var securityOfficer1 = securityOfficer1Location.getValue();
+  let activess = SpreadsheetApp.getActiveSpreadsheet();
+  let activessSheet = activess.getSheetByName("SHEET NAME");
+  let securityOfficer1Location = activessSheet.getRange(4, 10);
+  let securityOfficer1 = securityOfficer1Location.getValue();
   
   // Security Officer #2
-  var activess = SpreadsheetApp.getActiveSpreadsheet();
-  var activessSheet = activess.getSheetByName("Pass On");
-  var securityOfficer2Location = activessSheet.getRange(5, 10);
-  var securityOfficer2 = securityOfficer2Location.getValue();
+  let activess = SpreadsheetApp.getActiveSpreadsheet();
+  let activessSheet = activess.getSheetByName("SHEET NAME");
+  let securityOfficer2Location = activessSheet.getRange(5, 10);
+  let securityOfficer2 = securityOfficer2Location.getValue();
 
   // Security Officer #3
-  var activess = SpreadsheetApp.getActiveSpreadsheet();
-  var activessSheet = activess.getSheetByName("Pass On");
-  var securityOfficer3Location = activessSheet.getRange(6, 10);
-  var securityOfficer3 = securityOfficer3Location.getValue();
+  let activess = SpreadsheetApp.getActiveSpreadsheet();
+  let activessSheet = activess.getSheetByName("SHEET NAME");
+  let securityOfficer3Location = activessSheet.getRange(6, 10);
+  let securityOfficer3 = securityOfficer3Location.getValue();
 
   // Badging and Lenel Narrative
-  var badingAndLenelNarativeLocation = activessSheet.getRange(9, 9);
-  var badingAndLenelNarative = badingAndLenelNarativeLocation.getValue();
+  let badingAndLenelNarativeLocation = activessSheet.getRange(9, 9);
+  let badingAndLenelNarative = badingAndLenelNarativeLocation.getValue();
 
   // Camera Audit Narrative
-  var cameraAuditNarrativeLocation = activessSheet.getRange(12, 9);
-  var cameraAuditNarrativeNarative = cameraAuditNarrativeLocation.getValue();
+  let cameraAuditNarrativeLocation = activessSheet.getRange(12, 9);
+  let cameraAuditNarrativeNarative = cameraAuditNarrativeLocation.getValue();
 
   // Comms Check
-  var commsCheckStatusLocation = activessSheet.getRange(18, 12);
-  var commsCheckStatus = commsCheckStatusLocation.getValue();
+  let commsCheckStatusLocation = activessSheet.getRange(18, 12);
+  let commsCheckStatus = commsCheckStatusLocation.getValue();
 
   // Badge Tracker
-  var badgeTrackerStatusLocation = activessSheet.getRange(17, 12);
-  var badgeTrackerStatus = badgeTrackerStatusLocation.getValue();
+  let badgeTrackerStatusLocation = activessSheet.getRange(17, 12);
+  let badgeTrackerStatus = badgeTrackerStatusLocation.getValue();
 
   // Camera Audit
-  var cameraAuditStatusLocation = activessSheet.getRange(18, 12);
-  var cameraAuditStatus = cameraAuditStatusLocation.getValue();
+  let cameraAuditStatusLocation = activessSheet.getRange(18, 12);
+  let cameraAuditStatus = cameraAuditStatusLocation.getValue();
 
   // TES Rover 
-  var roverStatusLocation = activessSheet.getRange(19, 12);
-  var roverStatus = roverStatusLocation.getValue();
+  let roverStatusLocation = activessSheet.getRange(19, 12);
+  let roverStatus = roverStatusLocation.getValue();
 
   // TES SOC
-  var socStatusLocation = activessSheet.getRange(20, 12);
-  var socStatus = socStatusLocation.getValue();
+  let socStatusLocation = activessSheet.getRange(20, 12);
+  let socStatus = socStatusLocation.getValue();
 
   // Post Keys
-  var postKeysStatusLocation = activessSheet.getRange(21, 12);
-  var postKeysStatus = postKeysStatusLocation.getValue();
+  let postKeysStatusLocation = activessSheet.getRange(21, 12);
+  let postKeysStatus = postKeysStatusLocation.getValue();
 
   // Master Keys
-  var masterKeysStatusLocation = activessSheet.getRange(22, 12);
-  var masterKeysStatus = masterKeysStatusLocation.getValue();
+  let masterKeysStatusLocation = activessSheet.getRange(22, 12);
+  let masterKeysStatus = masterKeysStatusLocation.getValue();
 
   // Temperature Reader #1
-  var tempReader1StatusLocation = activessSheet.getRange(23, 12);
-  var tempReader1Status = tempReader1StatusLocation.getValue();
+  let tempReader1StatusLocation = activessSheet.getRange(23, 12);
+  let tempReader1Status = tempReader1StatusLocation.getValue();
 
   // Temperature Reader #2
-  var tempReader2StatusLocation = activessSheet.getRange(24, 12);
-  var tempReader2Status = tempReader2StatusLocation.getValue();
+  let tempReader2StatusLocation = activessSheet.getRange(24, 12);
+  let tempReader2Status = tempReader2StatusLocation.getValue();
   
-  var messageBody = tempReader1Status;
+  let messageBody = tempReader1Status;
 
-  // SET DOC VARS
+  // SET DOC letS
 
   // Logbook Folder ID: LOGBOOK FOLDER ID // Must be availiable to all users
   // Temp Doc ID: TEMP DOC ID
   
   // Template Location
-  const templateID = "TEMPLATE ID";
-  const docFile = DriveApp.getFileById(templateID);
+  let templateID = "TEMPLATE ID";
+  let docFile = DriveApp.getFileById(templateID);
 
   // Main Folder
-  const logbookFolderID = "LOGBOOK FOLDER ID";
-  const logbookFolder = DriveApp.getFolderById(logbookFolderID);
+  let logbookFolderID = "LOGBOOK FOLDER ID";
+  let logbookFolder = DriveApp.getFolderById(logbookFolderID);
   
   // Make copy of template
-  const tempFile = docFile.makeCopy(logbookFolder);
+  let tempFile = docFile.makeCopy(logbookFolder);
 
   // Get ID
-  const tempDocFile = DocumentApp.openById(tempFile.getId())
+  let tempDocFile = DocumentApp.openById(tempFile.getId())
 
   // EST Body
-  const body = tempDocFile.getBody();
+  let body = tempDocFile.getBody();
 
   // Get Shift
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("FORM INPUTS - LOCATION SHEET TAB NAME");
-  var range = sheet.getRange(3, 10);
-  var shift = range.getValue();
+  let ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName("FORM INPUTS - LOCATION SHEET TAB NAME");
+  let range = sheet.getRange(3, 10);
+  let shift = range.getValue();
 
   // Search and Replace All Values From Template
   body.replaceText("{Date}", date);
@@ -140,12 +140,12 @@ function generateForm() {
   tempDocFile.saveAndClose(); 
 
   // Generate Blob
-  const tempDocFileBlob = tempDocFile.getAs(MimeType.PDF);
+  let tempDocFileBlob = tempDocFile.getAs(MimeType.PDF);
   
   /////////////////////////////////////////////////////////////////////////
   // CONDITIONALS FOR SAVING IN CORRECT FOLDER
 
-  // Generate Date Vars
+  // Generate Date lets
   let today = new Date();
   //Use this if padding doesn't work: let dd = today.getDate();
   let dd = String(today.getDate()).padStart(2, '0');
@@ -157,38 +157,38 @@ function generateForm() {
 
   if(yyyy == '2021'){
     // Establish Folder IDs  > DriveApp.getFolderById("")
-    var JanFolder = DriveApp.getFolderById("ID")
-    var FebFolder = DriveApp.getFolderById("ID")
-    var MarFolder = DriveApp.getFolderById("ID")
-    var AprFolder = DriveApp.getFolderById("ID")
-    var MayFolder = DriveApp.getFolderById("ID")
-    var JunFolder = DriveApp.getFolderById("ID")
-    var JulFolder = DriveApp.getFolderById("ID")
-    var AugFolder = DriveApp.getFolderById("ID")
-    var SepFolder = DriveApp.getFolderById("ID")
-    var OctFolder = DriveApp.getFolderById("ID")
-    var NovFolder = DriveApp.getFolderById("ID")
-    var DecFolder = DriveApp.getFolderById("ID")
+    let JanFolder = DriveApp.getFolderById("ID")
+    let FebFolder = DriveApp.getFolderById("ID")
+    let MarFolder = DriveApp.getFolderById("ID")
+    let AprFolder = DriveApp.getFolderById("ID")
+    let MayFolder = DriveApp.getFolderById("ID")
+    let JunFolder = DriveApp.getFolderById("ID")
+    let JulFolder = DriveApp.getFolderById("ID")
+    let AugFolder = DriveApp.getFolderById("ID")
+    let SepFolder = DriveApp.getFolderById("ID")
+    let OctFolder = DriveApp.getFolderById("ID")
+    let NovFolder = DriveApp.getFolderById("ID")
+    let DecFolder = DriveApp.getFolderById("ID")
   }
 
   else if(yyyy == '2022'){
     // Establish Folder IDs  > DriveApp.getFolderById("")
-    var JanFolder = DriveApp.getFolderById("ID")
-    var FebFolder = DriveApp.getFolderById("ID")
-    var MarFolder = DriveApp.getFolderById("ID")
-    var AprFolder = DriveApp.getFolderById("ID")
-    var MayFolder = DriveApp.getFolderById("ID")
-    var JunFolder = DriveApp.getFolderById("ID")
-    var JulFolder = DriveApp.getFolderById("ID")
-    var AugFolder = DriveApp.getFolderById("ID")
-    var SepFolder = DriveApp.getFolderById("ID")
-    var OctFolder = DriveApp.getFolderById("ID")
-    var NovFolder = DriveApp.getFolderById("ID")
-    var DecFolder = DriveApp.getFolderById("ID")
+    let JanFolder = DriveApp.getFolderById("ID")
+    let FebFolder = DriveApp.getFolderById("ID")
+    let MarFolder = DriveApp.getFolderById("ID")
+    let AprFolder = DriveApp.getFolderById("ID")
+    let MayFolder = DriveApp.getFolderById("ID")
+    let JunFolder = DriveApp.getFolderById("ID")
+    let JulFolder = DriveApp.getFolderById("ID")
+    let AugFolder = DriveApp.getFolderById("ID")
+    let SepFolder = DriveApp.getFolderById("ID")
+    let OctFolder = DriveApp.getFolderById("ID")
+    let NovFolder = DriveApp.getFolderById("ID")
+    let DecFolder = DriveApp.getFolderById("ID")
   }
   
   // Correctly Formated Current Date
-  var conditionalDTG = mm + "/" + yyyy;
+  let conditionalDTG = mm + "/" + yyyy;
   
   if(mm == '01'){
     formFolder = JanFolder;
@@ -250,11 +250,11 @@ function generateForm() {
           
   }
 
-  var formName = mm + "/" + dd + "/" + yyyy + "_" + shift;
+  let formName = mm + "/" + dd + "/" + yyyy + "_" + shift;
   
-  var newPassOn = formFolder.createFile(tempDocFileBlob).setName(formName);
-  var newPassOnURL = newPassOn.getUrl();
-  var URL = formFolder.getUrl(); 
+  let newPassOn = formFolder.createFile(tempDocFileBlob).setName(formName);
+  let newPassOnURL = newPassOn.getUrl();
+  let URL = formFolder.getUrl(); 
 
   // Remove Temp Doc
   logbookFolder.removeFile(tempFile);
@@ -263,14 +263,14 @@ function generateForm() {
   //logbookFolder.removeFile(tempDocFile);
   
   // Send Message
-  //var messageBody = "The Pass On PDF named \'" + formName + "\' has been saved at FOLDER PATH NAME" + yyyy + "/" + formFolder + " or " + URL;
-  var messageBody = "<strong>Shift: </strong>" + shift + "<br><strong>Filename: </strong>" + formName + "<br><b>File URL: </b>" + newPassOnURL + "<br><b>Folder Location: </b> Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + "<br><b>Folder URL: </b>" + URL;
+  //let messageBody = "The Pass On PDF named \'" + formName + "\' has been saved at FOLDER PATH NAME" + yyyy + "/" + formFolder + " or " + URL;
+  let messageBody = "<strong>Shift: </strong>" + shift + "<br><strong>Filename: </strong>" + formName + "<br><b>File URL: </b>" + newPassOnURL + "<br><b>Folder Location: </b> Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + "<br><b>Folder URL: </b>" + URL;
 
-  var rslMessageBody = "<strong>Badging and Lenel</strong>" +  "<br>" + badingAndLenelNarative + "<br>" + "<br>" + "<strong>Cameras</strong>" + "<br>" + cameraAuditNarrativeNarative + "<br>" + "<br>" + newPassOnURL;
+  let rslMessageBody = "<strong>Badging and Lenel</strong>" +  "<br>" + badingAndLenelNarative + "<br>" + "<br>" + "<strong>Cameras</strong>" + "<br>" + cameraAuditNarrativeNarative + "<br>" + "<br>" + newPassOnURL;
 
-  var subject = 'A ' + shift + ' pass on has been generated for Thomas Edison';
+  let subject = 'A ' + shift + ' pass on has been generated for Thomas Edison';
 
-  var modalMessage = "The orm named \'" + formName + "\' has been saved at Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + " or " + URL;
+  let modalMessage = "The orm named \'" + formName + "\' has been saved at Thomas Edison/Audits/Pass Ons/" + yyyy + "/" + formFolder + " or " + URL;
   Browser.msgBox(modalMessage);
 
   if(Session.getActiveUser().getEmail() != 'admin email'){
