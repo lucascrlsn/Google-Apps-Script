@@ -89,7 +89,7 @@
         // PLACE THIS AFTER SEARCHVIEW BELOW IF PASSING PARAMS - , callback: otherFunc, params: {title: "You have executed ANOTHER search!"}
         loadView({func: "loadCRMSearchView", callback: setCRMDataForSearch});
         document.getElementById("CRM-search-link").textContent = "Lookup";
-
+        
       }
 
       // LOAD CRM RECORDS ONLY INTO MEMORY FOR EASY SEARCH IN FUNC ABOVE
@@ -102,12 +102,13 @@
           // DEACTIVATE LOADING MODAL
           loadingEnd();
         }).getCRMDataForSearch();
-
+        
       }
 
       function searchCRM(){
         let searchCRMInput = document.getElementById("searchCRMInput").value.toString().toLowerCase();
         let searchCRMWords = searchCRMInput.split(/\s+/);
+        // COL INDICES SELECTED BELOW FOR ONLY COLUMNS/FIELDS THAT CONTAIN DATA THAT YOU WANT TO BE SEARCHED
         let CRMSearchColumns = [0,1,2,3,4,5,6,7];
         let CRMResultsArray = searchCRMInput === "" ? [] : CRMData.filter(function(r){
           return searchCRMWords.every(function(word){
@@ -125,14 +126,15 @@
         CRMSearchResultsBox.innerHTML = "";
         CRMResultsArray.forEach(function(r){
           let CRMRow = CRMTemplate.cloneNode(true);
+          // RECORD ID BELOW NEEDS TO BE UNIQUE, TYPICALLY TIMESTAMP OF DATA CREATION
           let recordIDColumn = CRMRow.querySelector(".recordID");
-
           let fnameColumn = CRMRow.querySelector(".fname");
           let lnameColumn = CRMRow.querySelector(".lname");
           let phoneNumberColumn = CRMRow.querySelector(".phoneNumber");
           let jobTitleColumn = CRMRow.querySelector(".jobTitle");
           let companyeColumn = CRMRow.querySelector(".company");
-
+          let addressColumn = CRMRow.querySelector(".company");
+          let leadTypeColumn = CRMRow.querySelector(".company");
           let deleteButton = CRMRow.querySelector(".delete-button");
           let editButton = CRMRow.querySelector(".edit-button");
 
@@ -140,11 +142,14 @@
           deleteButton.dataset.recordID = r[0];
           editButton.dataset.recordID = r[0];
 
+          // BELOW INDICES NEED TO MATCH [PROJECT NAME]SearchColumns VAR LISTED ABOVE EXACTLY
           fnameColumn.textContent = r[1];
           lnameColumn.textContent = r[2];
           phoneNumberColumn.textContent = r[3];
           jobTitleColumn.textContent = r[4];
           companyeColumn.textContent = r[5];
+          addressColumn.textContent = r[6];
+          leadTypeColumn.textContent = r[7];
 
           CRMSearchResultsBox.appendChild(CRMRow).withFailureHandler(failedSearch());
         });
@@ -209,7 +214,7 @@
         CRMRecordInfo.fname = document.getElementById("fname").value;
         CRMRecordInfo.lname = document.getElementById("lname").value;
         CRMRecordInfo.EUID = document.getElementById("EUID").value;
-        CRMRecordInfo.managementReview = document.getElementById("managementReview").value;
+        CRMRecordInfo.managementReview = document.getElementById("managementReview").value;        
 
         // idForEdit NOT PART OF PREVIOUS OBJECT
         let CRMIdForEdit = document.getElementById("recordID").value;
@@ -221,7 +226,7 @@
           },2000);
           setTimeout(function(){loadCRMSearchView()},1500);
           // DEACTIVATE LOADING MODAL
-          loadingEnd();
+          loadingEnd();          
         }).editCRMRecordById(CRMIdForEdit,CRMRecordInfo);
       }
 
@@ -245,12 +250,12 @@
 
       function loadingStart(){
         document.getElementById("loading").classList.remove("invisible");
-
+        
       }
 
       function loadingEnd(){
         document.getElementById("loading").classList.add("invisible");
-
+        
       }
 
       document.getElementById("CRM-search-link").addEventListener("click",loadCRMSearchView);
