@@ -5,11 +5,11 @@ function accessCRMCRUD() {
   let scriptProperties = PropertiesService.getScriptProperties();
 
   // SET WORKSHEET ID
-  let SpreadsheetID = "1ASSelzFhN32EU--JyhYspcy3ZNDZmLWq1Q7Zgupdus4";
+  var SpreadsheetID = "1ASSelzFhN32EU--JyhYspcy3ZNDZmLWq1Q7Zgupdus4";
   scriptProperties.setProperty('SpreadsheetID', JSON.stringify(SpreadsheetID).replace(/['"]+/g,""));
 
   // SET COLUMN HEADER INDEXS IN THE BACKGROUND
-  let ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID')),
+  var ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID')),
   ws = ss.getSheetByName("main"),
   headers = ws.getDataRange().getValues().shift();
   
@@ -18,7 +18,8 @@ function accessCRMCRUD() {
 
   // CALL PROPERTY BY: PropertiesService.getScriptProperties().getProperty('rawDataColIndices')
 
-  let firstNameColumnIndex = headers.indexOf("First Name")+1,
+  let dateAddedColumnIndex = headers.indexOf("Date Added")+1,
+  firstNameColumnIndex = headers.indexOf("First Name")+1,
   lastNameColumnIndex = headers.indexOf("Last Name")+1,
   phoneNumberColumnIndex = headers.indexOf("Phone Number")+1,
   jobTitleColumnIndex = headers.indexOf("Job Title")+1,
@@ -30,6 +31,7 @@ function accessCRMCRUD() {
     // Set multiple script properties in one call.
     const scriptProperties = PropertiesService.getScriptProperties();
     scriptProperties.setProperties({
+      'dateAddedColumnIndex': JSON.stringify(dateAddedColumnIndex).replace(/['"]+/g,""),
       'firstNameColumnIndex': JSON.stringify(firstNameColumnIndex).replace(/['"]+/g,""),
       'lastNameColumnIndex': JSON.stringify(lastNameColumnIndex).replace(/['"]+/g,""),
       'phoneNumberColumnIndex': JSON.stringify(phoneNumberColumnIndex).replace(/['"]+/g,""),
@@ -43,17 +45,9 @@ function accessCRMCRUD() {
     console.log('Failed with error %s', err.message);
   }
   
-  //scriptProperties.setProperty('firstNameColumnIndex', JSON.stringify(firstNameColumnIndex).replace(/['"]+/g,"")),
-  //scriptProperties.setProperty('lastNameColumnIndex', JSON.stringify(lastNameColumnIndex).replace(/['"]+/g,""));
-  //scriptProperties.setProperty('phoneNumberColumnIndex', JSON.stringify(phoneNumberColumnIndex).replace(/['"]+/g,""));
-  //scriptProperties.setProperty('jobTitleColumnIndex', JSON.stringify(jobTitleColumnIndex).replace(/['"]+/g,""));
-  //scriptProperties.setProperty('companyColumnIndex', JSON.stringify(companyColumnIndex).replace(/['"]+/g,"")); 
-  //scriptProperties.setProperty('addressColumnIndex', JSON.stringify(addressColumnIndex).replace(/['"]+/g,""));
-  //scriptProperties.setProperty('leadTypeColumnIndex', JSON.stringify(leadTypeColumnIndex).replace(/['"]+/g,""));
-  
   const htmlServ = HtmlService.createTemplateFromFile("app_CRM"),
   html = htmlServ.evaluate();
-  html.setWidth(1200).setHeight(600);
+  html.setWidth(1200).setHeight(400);
   const ui = SpreadsheetApp.getUi();
 
   ui.showModalDialog(html, "Customer Relationship Management");
@@ -90,16 +84,18 @@ function loadCRMHelpView(){
 
 function getCRMDataForSearch(){
 
-  var startFunc = new Date().getTime();
+  let startFunc = new Date().getTime();
 
-  var ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
+  let ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
   const ws = ss.getSheetByName("main");
 
-  var endFunc = new Date().getTime();
+  let endFunc = new Date().getTime();
 
   Logger.log('All data was returned in ' + (endFunc - startFunc) + ' microseconds');
 
-  return ws.getRange(2,1,ws.getLastRow()-1,ws.getMaxColumns()).getDisplayValues().withFailureHandler(failedDataRetrieval);
+
+  // TRY TO PLACE .withFailureHandler(failedDataRetrieval)
+  return ws.getRange(2,1,ws.getLastRow()-1,ws.getMaxColumns()).getDisplayValues();
 
 }
 
@@ -123,7 +119,7 @@ function deleteCRMDataByID(CRMIdForDelete){
 
 function getCRMRecordById(CRMIdForEdit){
 
-  var startFunc = new Date().getTime();
+  let startFunc = new Date().getTime();
 
   const ss = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('SpreadsheetID'));
   const ws = ss.getSheetByName("main");
@@ -133,18 +129,18 @@ function getCRMRecordById(CRMIdForEdit){
   const CRMRecordIdRowNumber = CRMRecordIdPosition === -1 ? 0 : CRMRecordIdPosition + 2;
   const CRMRecordInfo = ws.getRange(CRMRecordIdRowNumber,1,1,ws.getMaxColumns()).getDisplayValues()[0];
 
-  // GET ROW VALUES
-  var headers = ws.getDataRange().getValues().shift();
-  var dateAddedIndex = headers.indexOf("Date Added");
-  var firstNameIndex = headers.indexOf("First Name");
-  var lastNameIndex = headers.indexOf("Last Name");  
-  var phoneNumberIndex = headers.indexOf("Phone Number");  
-  var jobTitleIndex = headers.indexOf("Job Title");
-  var companyIndex = headers.indexOf("Company");  
-  var addressIndex = headers.indexOf("Address");    
-  var leadTypeIndex = headers.indexOf("Lead Type");  
+  // GET ROW VALUES BY EST COL VARS
+  let headers = ws.getDataRange().getValues().shift();
+  let dateAdded = headers.indexOf("Date Added");
+  let fname = headers.indexOf("First Name");
+  let lname = headers.indexOf("Last Name");  
+  let phoneNumber = headers.indexOf("Phone Number");  
+  let jobTitle = headers.indexOf("Job Title");
+  let company = headers.indexOf("Company");  
+  let address = headers.indexOf("Address");    
+  let leadType = headers.indexOf("Lead Type");  
 
-  var endFunc = new Date().getTime();
+  let endFunc = new Date().getTime();
 
   Logger.log('A specific record was grabbed in ' + (endFunc - startFunc) + ' microseconds');
 
@@ -152,14 +148,14 @@ function getCRMRecordById(CRMIdForEdit){
   // FIND AND SET COLUMN INDEXES BASED OF COLUMN NAMES - THIS ALLOWS SERVER TO FLEX IF/WHEN COLUMN/FIELDS ARE MODIFIED AND/OR MOVED
   
   return {recordID: CRMRecordInfo[0],
-            dateAdded: CRMRecordInfo[dateAddedIndex],
-            fname: CRMRecordInfo[firstNameIndex],
-            lname: CRMRecordInfo[lastNameIndex],
-            phoneNumber: CRMRecordInfo[phoneNumberIndex],
-            jobTitle: CRMRecordInfo[jobTitleIndex],
-            company: CRMRecordInfo[companyIndex],
-            address: CRMRecordInfo[addressIndex],
-            leadType: CRMRecordInfo[leadTypeIndex]
+            dateAdded: CRMRecordInfo[dateAdded],
+            fname: CRMRecordInfo[fname],
+            lname: CRMRecordInfo[lname],
+            phoneNumber: CRMRecordInfo[phoneNumber],
+            jobTitle: CRMRecordInfo[jobTitle],
+            company: CRMRecordInfo[company],
+            address: CRMRecordInfo[address],
+            leadType: CRMRecordInfo[leadType]
             }
 
 }
@@ -186,28 +182,25 @@ function editCRMRecordById(CRMIdForEdit,CRMRecordInfo){
 
   let changeValue = 'False';
 
-  CRMRecordInfo.dateAdded != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')) ? (ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')).setValue(CRMRecordInfo.dateAdded),(changeValue = 'True')) : PASS; 
+  CRMRecordInfo.dateAdded != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateColumnIndex')) ? (ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('dateAddedColumnIndex')).setValue(CRMRecordInfo.dateAdded),(changeValue = 'True')) : PASS; 
 
-  CRMRecordInfo.fname != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('siteColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('siteColumnIndex')).setValue(CRMRecordInfo.fname) : PASS;
+  CRMRecordInfo.fname != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')).setValue(CRMRecordInfo.fname) : PASS;
 
-  CRMRecordInfo.lname != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('processColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('processColumnIndex')).setValue(CRMRecordInfo.lname) : PASS;
+  CRMRecordInfo.lname != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')).setValue(CRMRecordInfo.lname) : PASS;
 
   CRMRecordInfo.phoneNumber != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('phoneNumberColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('phoneNumberColumnIndex')).setValue(CRMRecordInfo.phoneNumber) : PASS;
 
-  CRMRecordInfo.jobTitle != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('justificationColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('justificationColumnIndex')).setValue(CRMRecordInfo.jobTitle) : PASS;
-
-  CRMRecordInfo.company != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('jobTitleColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('jobTitleColumnIndex')).setValue(CRMRecordInfo.company) : PASS;
-
-  CRMRecordInfo.address != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('firstNameColumnIndex')).setValue(CRMRecordInfo.address) : PASS;
-  
-  CRMRecordInfo.leadType != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('lastNameColumnIndex')).setValue(CRMRecordInfo.leadType) : PASS;
+  CRMRecordInfo.jobTitle != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('jobTitleColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('jobTitleColumnIndex')).setValue(CRMRecordInfo.jobTitle) : PASS;
 
   CRMRecordInfo.company != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('companyColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('companyColumnIndex')).setValue(CRMRecordInfo.company) : PASS;
+
+  CRMRecordInfo.address != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('addressColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('addressColumnIndex')).setValue(CRMRecordInfo.address) : PASS;
+  
+  CRMRecordInfo.leadType != ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('leadTypeColumnIndex')) ? ws.getRange(CRMRecordIdRowNumber,PropertiesService.getScriptProperties().getProperty('leadTypeColumnIndex')).setValue(CRMRecordInfo.leadType) : PASS;
   
   var endFunc = new Date().getTime();
 
   Logger.log('A specific record was edited in ' + (endFunc - startFunc) + ' microseconds. Was the date changed? ' + changeValue);
 
   return true;
-}
 }
