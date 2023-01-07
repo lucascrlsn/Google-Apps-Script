@@ -1,4 +1,4 @@
-function 1DArrayFilter() {
+function testREGEX() {
 
   try {
 
@@ -10,11 +10,11 @@ function 1DArrayFilter() {
 
   } catch (err) {
     // HANDLE EXCEPTION
-    console.log('Failed with error: %s', err.message);
+    let functionName = arguments.callee.name;
+    console.log("Failed in function " + functionName  + " with error \"" + err.message + "\"");
   }
 
 }
-
 
 let filterLogic = function(item){
 
@@ -28,12 +28,8 @@ let filterLogic = function(item){
 
     } catch (err) {
       // HANDLE EXCEPTION
-      console.log('Failed with error: %s', err.message);
+      let functionName = arguments.callee.name;
+      console.log("Failed in function " + functionName  + " with error \"" + err.message + "\"");
     }
 
 }
-
-
-
-
-
