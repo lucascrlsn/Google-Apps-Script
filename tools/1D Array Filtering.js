@@ -1,4 +1,4 @@
-function testREGEX() {
+function 1DArrayFilter() {
 
   try {
 
